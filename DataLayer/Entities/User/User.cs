@@ -1,5 +1,6 @@
 ﻿using DataLayer.Entities.UserTraker;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace DataLayer.Entities.User
 {
@@ -32,6 +33,8 @@ namespace DataLayer.Entities.User
         [MaxLength(200, ErrorMessage = "{0} نمی تواند بیشتر از {1} کاراکتر باشد .")]
         public string Password { get; set; }
 
+        [Display(Name = "ورود با گوگل")]
+        public bool LoginWithGoogle { get; set; }
 
         [Display(Name = "تاریخ آخرین ورود")]
         public DateTime? LastLoginDate { get; set; }
@@ -57,9 +60,9 @@ namespace DataLayer.Entities.User
         public bool IsEmailActive { get; set; }
 
         [Display(Name = "شماره تلفن همراه")]
-        [Required(ErrorMessage = "لطفا {0} را وارد کنید!")]
+        [AllowNull]
         [MaxLength(13, ErrorMessage = "{0} نمیتواند بیشتر از {1} کارکتر باشد")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Display(Name = "اخیرین تغییرات")]
         public DateTime LastChange { get; set; }
@@ -73,7 +76,7 @@ namespace DataLayer.Entities.User
 
         [Display(Name = "حذف شده")]
         public bool IsDelete { get; set; }
-        
+
         #region Relations
 
         public virtual IEnumerable<Post.Post> Posts { get; set; }

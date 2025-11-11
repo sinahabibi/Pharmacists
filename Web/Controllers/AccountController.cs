@@ -1,5 +1,4 @@
 ﻿using Core.DTOs.Account;
-using Core.Extensions;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -27,7 +26,7 @@ namespace Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard", new { area = "User" });
             }
             return View();
         }
@@ -62,7 +61,7 @@ namespace Web.Controllers
         {
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard", new { area = "User" });
             }
 
             ViewData["ReturnUrl"] = returnUrl;
@@ -118,7 +117,7 @@ namespace Web.Controllers
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard", new { area = "User" });
         }
 
         #endregion
@@ -185,7 +184,7 @@ namespace Web.Controllers
                 return Redirect(returnUrl);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard", new { area = "User" });
         }
 
         #endregion
@@ -259,8 +258,6 @@ namespace Web.Controllers
 
         #region Logout
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);

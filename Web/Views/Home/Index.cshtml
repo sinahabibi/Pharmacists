@@ -77,30 +77,25 @@
                     animation-delay: calc(1s * -0.45);
                     transform: rotateZ(60deg) rotateX(66deg) rotateY(0deg);
                 }
+
         @@keyframes atom-spinner-animation {
-            100%
-
-        {
-            transform: rotateZ(360deg) rotateX(66deg) rotateY(0deg);
-        }
-
+            100% {
+                transform: rotateZ(360deg) rotateX(66deg) rotateY(0deg);
+            }
         }
 
         @@keyframes glowing-border {
-            0%
+            0% {
+                box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #a78bfa;
+            }
 
-        {
-            box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #a78bfa;
-        }
+            50% {
+                box-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #a78bfa;
+            }
 
-        50% {
-            box-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6, 0 0 30px #a78bfa;
-        }
-
-        100% {
-            box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #a78bfa;
-        }
-
+            100% {
+                box-shadow: 0 0 5px #8b5cf6, 0 0 10px #8b5cf6, 0 0 15px #a78bfa;
+            }
         }
 
         .glowing-card {
@@ -126,20 +121,17 @@
         }
 
         @@keyframes liquid-background {
-            0%
+            0% {
+                background-position: 0% 50%;
+            }
 
-        {
-            background-position: 0% 50%;
-        }
+            50% {
+                background-position: 100% 50%;
+            }
 
-        50% {
-            background-position: 100% 50%;
-        }
-
-        100% {
-            background-position: 0% 50%;
-        }
-
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .liquid-glass {
@@ -190,7 +182,8 @@
                             <!-- Dropdown Panel -->
                             <div id="user-menu" class="absolute right-0 mt-3 w-48 rounded-xl shadow-lg liquid-glass hidden z-50 overflow-hidden">
                                 <div class="py-1">
-                                    <a href="profile.html" class="block px-4 py-3 text-sm text-slate-300 hover:bg-purple-500/20 hover:text-white transition-colors">Profile</a>
+                                    <a asp-area="User" asp-controller="Dashboard" asp-action="Index" class="block px-4 py-3 text-sm text-slate-300 hover:bg-purple-500/20 hover:text-white transition-colors">Dashboard</a>
+                                    <a asp-area="User" asp-controller="Profile" asp-action="EditProfile" class="block px-4 py-3 text-sm text-slate-300 hover:bg-purple-500/20 hover:text-white transition-colors">Profile</a>
                                     <a asp-area="" asp-controller="Account" asp-action="Logout" class="block px-4 py-3 text-sm text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-colors">Logout</a>
                                 </div>
                             </div>
@@ -230,7 +223,10 @@
         </div>
         <!-- Body -->
         <nav class="flex-grow p-4 flex flex-col justify-center text-center">
-            <div class="text-lg font-medium text-purple-400 mb-6">Welcome, Sina</div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="text-lg font-medium text-purple-400 mb-6">Welcome, @User.FindFirst("FirstName")?.Value</div>
+            }
             <div class="space-y-2">
                 <a href="#courses" class="block text-lg font-medium py-3 px-4 rounded-full hover:bg-white/10 transition-colors">Courses</a>
                 <a href="#about" class="block text-lg font-medium py-3 px-4 rounded-full hover:bg-white/10 transition-colors">About</a>
@@ -239,14 +235,28 @@
             </div>
         </nav>
         <!-- Footer -->
-        <div class="p-4 mt-auto space-y-3">
-            <a href="profile.html" class="w-full block text-center bg-slate-700/50 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-full transition-colors">
-                Profile
-            </a>
-            <a href="logout.html" class="w-full block text-center bg-red-600/50 hover:bg-red-600/70 text-white font-bold py-3 px-6 rounded-full transition-colors">
-                Logout
-            </a>
-        </div>
+       @if (User.Identity.IsAuthenticated)
+        {
+            <div class="p-4 mt-auto space-y-3">
+                <a asp-area="User" asp-controller="Dashboard" asp-action="Index" class="w-full block text-center bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-full transition-colors">
+                    Dashboard
+                </a>
+                <a asp-area="" asp-controller="Account" asp-action="Logout" class="w-full block text-center bg-red-600/50 hover:bg-red-600/70 text-white font-bold py-3 px-6 rounded-full transition-colors">
+                    Logout
+                </a>
+            </div>
+        }
+       else
+       {
+           <div class="p-4 mt-auto space-y-3">
+                <a asp-area="" asp-controller="Account" asp-action="Login" class="w-full block text-center bg-slate-700/50 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-full transition-colors">
+                   Login
+               </a>
+                <a asp-area="" asp-controller="Account" asp-action="Register" class="w-full block text-center bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-full transition-transform hover:scale-105">
+                    Sign Up
+               </a>
+           </div>
+       }
     </div>
 
 
@@ -437,7 +447,7 @@
                 }
             });
 
-           
+
         });
     </script>
 </body>

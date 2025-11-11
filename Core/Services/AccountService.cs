@@ -166,7 +166,7 @@ namespace Core.Services
                     FirstName = nameParts.Length > 0 ? nameParts[0] : "",
                     LastName = nameParts.Length > 1 ? string.Join(" ", nameParts.Skip(1)) : "",
                     Password = _passwordHasher.HashPassword(Guid.NewGuid().ToString()),
-                    PhoneNumber = "0000000000", // Default phone number
+                    LoginWithGoogle = true,
                     ActiveCode = Guid.NewGuid().ToString().Replace("-", ""),
                     SecurityCode = Guid.NewGuid().ToString().Replace("-", ""),
                     ActivePhoneNumberCode = new Random().Next(10000, 99999).ToString(),

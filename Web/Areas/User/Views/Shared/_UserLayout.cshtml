@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - User Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+            color: #e2e8f0;
+        }
+
+        @@keyframes liquid-background {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .liquid-glass {
+            background-color: rgba(255, 255, 255, 0.05);
+            background-image: linear-gradient(110deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0) 75%, rgba(255, 255, 255, 0.1) 100%);
+            background-size: 200% 200%;
+            animation: liquid-background 15s ease infinite;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-active {
+            background-color: rgba(139, 92, 246, 0.2);
+            border-left: 3px solid #8b5cf6;
+        }
+    </style>
+</head>
+<body class="antialiased bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900">
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 z-40 liquid-glass border-b border-slate-700/50">
+        <div class="flex items-center justify-between p-4">
+            <button id="mobile-menu-btn" class="text-slate-300 hover:text-purple-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+            <h1 class="text-xl font-bold">User Panel</h1>
+            <a href="/" class="text-slate-300 hover:text-purple-400">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                </svg>
+            </a>
+        </div>
+    </header>
+
+    <div class="flex min-h-screen pt-16 lg:pt-0">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out liquid-glass border-r border-slate-700/50">
+            <div class="flex flex-col h-full">
+                <!-- Logo -->
+                <div class="hidden lg:flex items-center justify-between p-6 border-b border-slate-700/50">
+                    <h1 class="text-2xl font-bold text-purple-400">User Panel</h1>
+                </div>
+
+                <!-- User Info -->
+                <div class="p-6 border-b border-slate-700/50">
+                    <div class="flex items-center space-x-3">
+                        <div>
+                            <p class="font-semibold text-slate-100">
+                                @{
+                                    var fullName = User.FindFirst("FullName")?.Value;
+                                    var displayName = fullName;
+                                    if (!string.IsNullOrEmpty(fullName) && fullName.Length > 20)
+                                    {
+                                        var firstName = fullName.Split(' ').FirstOrDefault();
+                                        displayName = firstName ?? fullName;
+                                    }
+                                }
+                                @displayName
+                            </p>
+                            <p class="text-sm text-slate-400 truncate max-w-[200px]" title="@User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value">
+                                @{
+                                    var email = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                                    var displayEmail = email;
+                                    if (!string.IsNullOrEmpty(email) && email.Length > 25)
+                                    {
+                                        displayEmail = email.Substring(0, 22) + "...";
+                                    }
+                                }
+                                @displayEmail
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                    <a asp-area="User" asp-controller="Dashboard" asp-action="Index"
+                       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "sidebar-active" : "")">
+                        <i class="fas fa-home w-5"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <a asp-area="User" asp-controller="Profile" asp-action="EditProfile"
+                       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" && ViewContext.RouteData.Values["action"]?.ToString() == "EditProfile" ? "sidebar-active" : "")">
+                        <i class="fas fa-user-edit w-5"></i>
+                        <span>Edit Profile</span>
+                    </a>
+
+                    <a asp-area="User" asp-controller="Profile" asp-action="ChangePassword"
+                       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Profile" && ViewContext.RouteData.Values["action"]?.ToString() == "ChangePassword" ? "sidebar-active" : "")">
+                        <i class="fas fa-key w-5"></i>
+                        <span>Change Password</span>
+                    </a>
+
+                    <a asp-area="User" asp-controller="Courses" asp-action="Index"
+                       class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Courses" ? "sidebar-active" : "")">
+                        <i class="fas fa-graduation-cap w-5"></i>
+                        <span>My Courses</span>
+                    </a>
+
+                    <div class="pt-4 border-t border-slate-700/50 mt-4">
+                        <a href="/" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all">
+                            <i class="fas fa-globe w-5"></i>
+                            <span>Back to Website</span>
+                        </a>
+
+                        <a asp-area="" asp-controller="Account" asp-action="Logout"
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">
+                            <i class="fas fa-sign-out-alt w-5"></i>
+                            <span>Logout</span>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Backdrop for mobile -->
+        <div id="sidebar-backdrop" class="fixed inset-0 bg-black/70 z-40 hidden lg:hidden"></div>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="mb-6 p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-300">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="mb-6 p-4 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            @RenderBody()
+        </main>
+    </div>
+
+    <script>
+              // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+              const sidebar = document.getElementById('sidebar');
+              const sidebarBackdrop = document.getElementById('sidebar-backdrop');
+
+              if (mobileMenuBtn) {
+         mobileMenuBtn.addEventListener('click', () => {
+                      sidebar.classList.toggle('-translate-x-full');
+            sidebarBackdrop.classList.toggle('hidden');
+                  });
+
+                  sidebarBackdrop.addEventListener('click', () => {
+        sidebar.classList.add('-translate-x-full');
+                    sidebarBackdrop.classList.add('hidden');
+         });
+              }
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

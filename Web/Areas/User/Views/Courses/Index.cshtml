@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "My Courses";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="liquid-glass rounded-2xl p-8">
+        <h1 class="text-3xl font-bold text-slate-100 mb-2">My Courses</h1>
+     <p class="text-slate-400">Manage and track your enrolled courses</p>
+    </div>
+
+    <!-- Tabs -->
+    <div class="liquid-glass rounded-xl p-2">
+        <div class="flex space-x-2">
+       <button class="flex-1 px-4 py-3 rounded-lg bg-purple-500 text-white font-medium transition-colors" id="tab-all">
+      All Courses
+         </button>
+    <button class="flex-1 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-700/50 font-medium transition-colors" id="tab-active">
+          Active
+        </button>
+     <button class="flex-1 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-700/50 font-medium transition-colors" id="tab-completed">
+        Completed
+   </button>
+   </div>
+    </div>
+
+    <!-- Courses List -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Empty State -->
+     <div class="col-span-full">
+        <div class="liquid-glass rounded-2xl p-12 text-center">
+                <div class="w-24 h-24 mx-auto mb-6 rounded-full bg-purple-500/20 flex items-center justify-center">
+  <i class="fas fa-graduation-cap text-purple-400 text-4xl"></i>
+      </div>
+    <h3 class="text-2xl font-bold text-slate-100 mb-2">No Courses Yet</h3>
+            <p class="text-slate-400 mb-6">You haven't enrolled in any courses yet. Start learning today!</p>
+       <a href="/" class="inline-block px-6 py-3 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-bold transition-transform hover:scale-105">
+          <i class="fas fa-search mr-2"></i>
+            Browse Courses
+                </a>
+            </div>
+        </div>
+
+        <!-- Sample Course Card (Hidden by default, for future use) -->
+      <div class="hidden liquid-glass rounded-xl overflow-hidden transform hover:-translate-y-2 transition-transform">
+          <div class="h-48 bg-gradient-to-br from-purple-500 to-indigo-600"></div>
+      <div class="p-6">
+         <div class="flex items-center justify-between mb-3">
+           <span class="px-3 py-1 rounded-full bg-green-500/20 text-green-300 text-xs font-semibold">Active</span>
+          <span class="text-slate-400 text-sm">60% Complete</span>
+       </div>
+                <h3 class="text-xl font-bold text-slate-100 mb-2">Course Title</h3>
+    <p class="text-slate-400 text-sm mb-4">Course description goes here...</p>
+  <div class="w-full bg-slate-700 rounded-full h-2 mb-4">
+      <div class="bg-purple-500 h-2 rounded-full" style="width: 60%"></div>
+            </div>
+      <button class="w-full px-4 py-2 rounded-lg bg-purple-500 hover:bg-purple-600 text-white font-medium transition-colors">
+         Continue Learning
+    </button>
+   </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tab switching functionality
+ const tabs = {
+   all: document.getElementById('tab-all'),
+            active: document.getElementById('tab-active'),
+            completed: document.getElementById('tab-completed')
+        };
+
+ Object.values(tabs).forEach(tab => {
+          tab.addEventListener('click', function() {
+     // Remove active class from all tabs
+         Object.values(tabs).forEach(t => {
+           t.classList.remove('bg-purple-500', 'text-white');
+        t.classList.add('text-slate-300', 'hover:bg-slate-700/50');
+         });
+         
+       // Add active class to clicked tab
+    this.classList.add('bg-purple-500', 'text-white');
+  this.classList.remove('text-slate-300', 'hover:bg-slate-700/50');
+   });
+        });
+    </script>
+}

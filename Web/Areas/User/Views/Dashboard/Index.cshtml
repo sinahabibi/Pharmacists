@@ -1,0 +1,128 @@
+﻿@{
+  ViewData["Title"] = "Dashboard";
+}
+
+<div class="space-y-6">
+    <!-- Welcome Section -->
+    <div class="liquid-glass rounded-2xl p-8">
+        <h1 class="text-3xl font-bold text-slate-100 mb-2">Welcome back, @ViewBag.UserName!</h1>
+  <p class="text-slate-400">Here's what's happening with your account today.</p>
+    </div>
+
+    <!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+   <!-- Total Courses -->
+        <div class="liquid-glass rounded-xl p-6 transform hover:-translate-y-1 transition-transform">
+        <div class="flex items-center justify-between">
+   <div>
+    <p class="text-slate-400 text-sm">Total Courses</p>
+       <h3 class="text-3xl font-bold text-slate-100 mt-2">0</h3>
+    </div>
+   <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+       <i class="fas fa-graduation-cap text-purple-400 text-xl"></i>
+       </div>
+       </div>
+        </div>
+
+    <!-- Completed -->
+        <div class="liquid-glass rounded-xl p-6 transform hover:-translate-y-1 transition-transform">
+    <div class="flex items-center justify-between">
+     <div>
+         <p class="text-slate-400 text-sm">Completed</p>
+     <h3 class="text-3xl font-bold text-slate-100 mt-2">0</h3>
+      </div>
+ <div class="w-12 h-12 rounded-full bg-green-500/20 flex items-center justify-center">
+            <i class="fas fa-check-circle text-green-400 text-xl"></i>
+       </div>
+</div>
+ </div>
+
+    <!-- In Progress -->
+        <div class="liquid-glass rounded-xl p-6 transform hover:-translate-y-1 transition-transform">
+            <div class="flex items-center justify-between">
+      <div>
+      <p class="text-slate-400 text-sm">In Progress</p>
+     <h3 class="text-3xl font-bold text-slate-100 mt-2">0</h3>
+      </div>
+        <div class="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+      <i class="fas fa-spinner text-cyan-400 text-xl"></i>
+   </div>
+         </div>
+ </div>
+
+    <!-- Member Since -->
+  <div class="liquid-glass rounded-xl p-6 transform hover:-translate-y-1 transition-transform">
+   <div class="flex items-center justify-between">
+       <div>
+   <p class="text-slate-400 text-sm">Member Since</p>
+          <h3 class="text-lg font-bold text-slate-100 mt-2">@ViewBag.RegisterDate</h3>
+       </div>
+          <div class="w-12 h-12 rounded-full bg-indigo-500/20 flex items-center justify-center">
+         <i class="fas fa-calendar text-indigo-400 text-xl"></i>
+   </div>
+     </div>
+   </div>
+ </div>
+
+    <!-- Quick Actions -->
+    <div class="liquid-glass rounded-2xl p-8">
+      <h2 class="text-2xl font-bold text-slate-100 mb-6">Quick Actions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+     <a asp-area="User" asp-controller="Courses" asp-action="Index"
+       class="flex items-center space-x-4 p-4 rounded-xl bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/30 transition-all">
+           <div class="w-12 h-12 rounded-full bg-purple-500/30 flex items-center justify-center">
+        <i class="fas fa-book text-purple-300 text-xl"></i>
+           </div>
+       <div>
+  <h3 class="font-semibold text-slate-100">Browse Courses</h3>
+            <p class="text-sm text-slate-400">Explore available courses</p>
+      </div>
+    </a>
+
+         <a asp-area="User" asp-controller="Profile" asp-action="EditProfile"
+    class="flex items-center space-x-4 p-4 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 transition-all">
+      <div class="w-12 h-12 rounded-full bg-cyan-500/30 flex items-center justify-center">
+        <i class="fas fa-user-edit text-cyan-300 text-xl"></i>
+    </div>
+  <div>
+       <h3 class="font-semibold text-slate-100">Edit Profile</h3>
+     <p class="text-sm text-slate-400">Update your information</p>
+ </div>
+       </a>
+
+      <a asp-area="User" asp-controller="Profile" asp-action="ChangePassword"
+         class="flex items-center space-x-4 p-4 rounded-xl bg-indigo-500/10 hover:bg-indigo-500/20 border border-indigo-500/30 transition-all">
+    <div class="w-12 h-12 rounded-full bg-indigo-500/30 flex items-center justify-center">
+       <i class="fas fa-key text-indigo-300 text-xl"></i>
+          </div>
+<div>
+ <h3 class="font-semibold text-slate-100">Change Password</h3>
+ <p class="text-sm text-slate-400">Update your password</p>
+    </div>
+       </a>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="liquid-glass rounded-2xl p-8">
+   <h2 class="text-2xl font-bold text-slate-100 mb-6">Recent Activity</h2>
+        <div class="space-y-4">
+ <div class="flex items-center justify-between p-4 rounded-lg bg-slate-800/30">
+                <div class="flex items-center space-x-4">
+          <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+ <i class="fas fa-user text-purple-400"></i>
+    </div>
+   <div>
+      <p class="text-slate-100 font-medium">Account Created</p>
+    <p class="text-sm text-slate-400">@ViewBag.RegisterDate</p>
+</div>
+  </div>
+         </div>
+
+         <div class="text-center py-8 text-slate-400">
+                <i class="fas fa-inbox text-4xl mb-3 opacity-50"></i>
+                <p>No recent activity</p>
+    </div>
+</div>
+    </div>
+</div>

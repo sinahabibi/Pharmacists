@@ -70,7 +70,7 @@ namespace Web.Controllers
         public IActionResult CustomAuthCheck()
         {
             var userId = User.GetUserId();
-            
+
             // بررسی دستی شرایط
             if (userId == null)
             {
