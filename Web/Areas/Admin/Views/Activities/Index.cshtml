@@ -1,0 +1,167 @@
+﻿@model List<DataLayer.Entities.RecentActivity.RecentActivity>
+
+@{
+    ViewData["Title"] = "فعالیت‌های اخیر";
+}
+
+<div class="fade-in">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                فعالیت‌های اخیر
+            </h1>
+            <p class="text-slate-400">مشاهده تمام فعالیت‌های ثبت شده در سیستم</p>
+        </div>
+        <button onclick="clearAllActivities()" class="px-6 py-3 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-all border border-red-500/30">
+            <i class="fas fa-trash ml-2"></i>
+            پاک کردن همه
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="glass-card rounded-lg p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-slate-400 text-sm mb-1">اولویت بالا</p>
+                    <p class="text-2xl font-bold text-white">@Model.Count(a => a.PriorityId == 1)</p>
+                </div>
+                <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-lg p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-slate-400 text-sm mb-1">اولویت متوسط</p>
+                    <p class="text-2xl font-bold text-white">@Model.Count(a => a.PriorityId == 2)</p>
+                </div>
+                <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-circle text-yellow-400"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-lg p-4">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-slate-400 text-sm mb-1">اولویت پایین</p>
+                    <p class="text-2xl font-bold text-white">@Model.Count(a => a.PriorityId == 3)</p>
+                </div>
+                <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                    <i class="fas fa-info-circle text-green-400"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activities Timeline -->
+    <div class="glass-card rounded-xl p-6">
+        @if (Model.Any())
+        {
+            <div class="space-y-4">
+                @foreach (var activity in Model)
+                {
+                    <div class="activity-item flex items-start space-x-4 space-x-reverse p-4 rounded-lg hover:bg-slate-800/30 transition-all" data-activity-id="@activity.Id">
+                        <!-- Timeline Dot -->
+                        <div class="flex-shrink-0 mt-1">
+                            <div class="w-4 h-4 rounded-full border-4 @(activity.PriorityId == 1 ? "border-red-500 bg-red-500/50" : activity.PriorityId == 2 ? "border-yellow-500 bg-yellow-500/50" : "border-green-500 bg-green-500/50")"></div>
+                        </div>
+
+                        <!-- Activity Content -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex-1">
+                                    <p class="text-white font-medium">@activity.Message</p>
+                                    <div class="flex items-center space-x-3 space-x-reverse mt-2">
+                                        <span class="text-sm text-slate-400">
+                                            <i class="fas fa-clock ml-1"></i>
+                                            @activity.CreateDate.ToString("yyyy/MM/dd HH:mm:ss")
+                                        </span>
+                                        <span class="text-xs px-2 py-1 rounded-full @(activity.PriorityId == 1 ? "bg-red-500/20 text-red-400" : activity.PriorityId == 2 ? "bg-yellow-500/20 text-yellow-400" : "bg-green-500/20 text-green-400")">
+                                            @activity.RecentActivityPriority.Title
+                                        </span>
+                                    </div>
+                                </div>
+                                <button onclick="deleteActivity(@activity.Id)" 
+                                        class="text-red-400 hover:text-red-300 transition-colors p-2">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-12">
+                <i class="fas fa-chart-line text-6xl text-slate-600 mb-4"></i>
+                <h3 class="text-xl font-bold text-white mb-2">هیچ فعالیتی یافت نشد</h3>
+                <p class="text-slate-400">فعالیت‌های جدید به محض ثبت در اینجا نمایش داده می‌شوند</p>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Delete single activity
+        async function deleteActivity(activityId) {
+            if (!confirm('آیا از حذف این فعالیت اطمینان دارید؟')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/Admin/Activities/Delete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ id: activityId })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Remove the activity from UI
+                    const activityElement = document.querySelector(`[data-activity-id="${activityId}"]`);
+                    if (activityElement) {
+                        activityElement.style.opacity = '0';
+                        setTimeout(() => activityElement.remove(), 300);
+                    }
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('خطا در انجام عملیات');
+            }
+        }
+
+        // Clear all activities
+        async function clearAllActivities() {
+            if (!confirm('آیا از حذف تمام فعالیت‌ها اطمینان دارید؟ این عملیات قابل بازگشت نیست.')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/Admin/Activities/ClearAll', {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('خطا در انجام عملیات');
+            }
+        }
+    </script>
+}

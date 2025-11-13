@@ -4,8 +4,6 @@ using DataLayer.Entities.Post;
 using DataLayer.Entities.RecentActivity;
 using DataLayer.Entities.User;
 using DataLayer.Entities.UserTraker;
-using DataLayer.Entities.Course;
-using DataLayer.Entities.Permission;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataLayer.Context
@@ -49,22 +47,9 @@ namespace DataLayer.Context
 
         #endregion
 
-        #region Settings & SMS
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Sms> Sms { get; set; }
-        #endregion
 
-        #region Courses
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<CourseEnrollment> CourseEnrollments { get; set; }
-        #endregion
-
-        #region RBAC
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Permission> Permissions { get; set; }
-        public DbSet<RolePermission> RolePermissions { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,38 +69,6 @@ namespace DataLayer.Context
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
-
-            // Relations: Courses
-            modelBuilder.Entity<CourseEnrollment>()
-                .HasOne(e => e.Course)
-                .WithMany(c => c.Enrollments)
-                .HasForeignKey(e => e.CourseId);
-
-            modelBuilder.Entity<CourseEnrollment>()
-                .HasOne<DataLayer.Entities.User.User>(e => e.User)
-                .WithMany()
-                .HasForeignKey(e => e.UserId);
-
-            // Relations: RBAC
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rp => rp.Role)
-                .WithMany(r => r.RolePermissions)
-                .HasForeignKey(rp => rp.RoleId);
-
-            modelBuilder.Entity<RolePermission>()
-                .HasOne(rp => rp.Permission)
-                .WithMany(p => p.RolePermissions)
-                .HasForeignKey(rp => rp.PermissionId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId);
-
-            modelBuilder.Entity<UserRole>()
-                .HasOne<DataLayer.Entities.User.User>(ur => ur.User)
-                .WithMany()
-                .HasForeignKey(ur => ur.UserId);
 
             #region All User Data
 

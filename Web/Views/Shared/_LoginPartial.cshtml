@@ -9,13 +9,19 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" asp-area="User" asp-controller="Dashboard" asp-action="Index">
                     <i class="fas fa-user-circle me-2"></i>
-                    Profile
+                    User Panel
                 </a>
             </li>
             <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                    <i class="fas fa-crown me-2 text-warning"></i>
+                    Admin Panel
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item" asp-area="User" asp-controller="Profile" asp-action="EditProfile">
                     <i class="fas fa-cog me-2"></i>
                     Settings
                 </a>
