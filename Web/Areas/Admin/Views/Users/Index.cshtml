@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Users";
+    var users = (IEnumerable<dynamic>)ViewBag.Users;
+}
+<h2>کاربران</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>شناسه</th>
+            <th>نام کاربری</th>
+            <th>ایمیل</th>
+            <th>بن</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var u in users)
+    {
+        <tr>
+            <td>@u.UserId</td>
+            <td>@u.UserName</td>
+            <td>@u.Email</td>
+            <td>@(u.IsBan ? "بله" : "خیر")</td>
+            <td>
+                <a class="btn btn-sm btn-warning" asp-area="Admin" asp-controller="Users" asp-action="ToggleBan" asp-route-id="@u.UserId">تغییر وضعیت بن</a>
+                <a class="btn btn-sm btn-secondary" asp-area="Admin" asp-controller="Roles" asp-action="AssignUserRole" asp-route-userId="@u.UserId">افزودن نقش</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

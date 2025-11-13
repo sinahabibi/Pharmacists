@@ -1,0 +1,11 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<div class="container">
+    <h1>داشبورد ادمین</h1>
+    <ul>
+        <li><a asp-area="Admin" asp-controller="Courses" asp-action="Index">مدیریت دوره‌ها</a></li>
+        <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">مدیریت کاربران</a></li>
+        <li><a asp-area="Admin" asp-controller="Roles" asp-action="Index">نقش‌ها و دسترسی‌ها</a></li>
+    </ul>
+</div>

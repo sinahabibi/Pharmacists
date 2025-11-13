@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Course Details";
+    var course = (dynamic)ViewBag.Course;
+}
+<h2>جزئیات دوره: @course.Title</h2>
+<p>قیمت: @course.Price</p>
+<p>وضعیت: @(course.IsActive ? "فعال" : "غیرفعال")</p>
+
+<h3>دانشجویان</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>کاربر</th>
+            <th>تاریخ ثبت‌نام</th>
+            <th>پرداخت</th>
+            <th>پیشرفت</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var e in course.Enrollments)
+    {
+        <tr>
+            <td>@e.UserId</td>
+            <td>@e.EnrollmentDate</td>
+            <td>@(e.IsPaid ? "بله" : "خیر")</td>
+            <td>@e.ProgressPercentage %</td>
+        </tr>
+    }
+    </tbody>
+</table>
+<p>
+    <a class="btn btn-primary" asp-area="Admin" asp-controller="Courses" asp-action="AddStudent" asp-route-id="@course.CourseId">افزودن دانشجو</a>
+</p>

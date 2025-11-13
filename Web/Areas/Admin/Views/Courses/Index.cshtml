@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Courses";
+    var courses = (IEnumerable<dynamic>)ViewBag.Courses;
+}
+<div class="container">
+    <h2>دوره‌ها</h2>
+    <p>
+        <a class="btn btn-primary" asp-area="Admin" asp-controller="Courses" asp-action="Create">افزودن دوره</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>عنوان</th>
+                <th>قیمت</th>
+                <th>فعال</th>
+                <th>دانشجو</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var c in courses)
+        {
+            <tr>
+                <td>@c.Title</td>
+                <td>@c.Price</td>
+                <td>@(c.IsActive ? "بله" : "خیر")</td>
+                <td>@c.StudentsCount</td>
+                <td>
+                    <a asp-area="Admin" asp-controller="Courses" asp-action="Details" asp-route-id="@c.CourseId">جزئیات</a> |
+                    <a asp-area="Admin" asp-controller="Courses" asp-action="Edit" asp-route-id="@c.CourseId">ویرایش</a> |
+                    <a asp-area="Admin" asp-controller="Courses" asp-action="Delete" asp-route-id="@c.CourseId">حذف</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
