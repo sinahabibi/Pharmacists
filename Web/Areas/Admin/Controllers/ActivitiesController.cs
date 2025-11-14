@@ -6,9 +6,7 @@ using Web.Attributes;
 
 namespace Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize]
-    public class ActivitiesController : Controller
+    public class ActivitiesController : AdminBaseController
     {
         private readonly WebContext _context;
 

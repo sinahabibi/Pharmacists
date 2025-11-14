@@ -144,20 +144,26 @@
                                        class="text-blue-400 hover:text-blue-300 transition-colors" title="Details">
                                         <i class="fas fa-eye"></i>
                                     </a>
-                                    <a asp-action="Edit" asp-route-id="@role.RoleId" 
-                                       class="text-green-400 hover:text-green-300 transition-colors" title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button onclick="toggleActive(@role.RoleId, '@role.RoleName', @role.IsActive.ToString().ToLower())" 
-                                            class="text-yellow-400 hover:text-yellow-300 transition-colors" title="Toggle Status">
-                                        <i class="fas fa-power-off"></i>
-                                    </button>
                                     @if (role.RoleName != "SuperAdmin")
                                     {
+                                        <a asp-action="Edit" asp-route-id="@role.RoleId" 
+                                           class="text-green-400 hover:text-green-300 transition-colors" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="toggleActive(@role.RoleId, '@role.RoleName', @role.IsActive.ToString().ToLower())" 
+                                                class="text-yellow-400 hover:text-yellow-300 transition-colors" title="Toggle Status">
+                                            <i class="fas fa-power-off"></i>
+                                        </button>
                                         <button onclick="deleteRole(@role.RoleId, '@role.RoleName')" 
                                                 class="text-red-400 hover:text-red-300 transition-colors" title="Delete">
                                             <i class="fas fa-trash"></i>
                                         </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-slate-600 px-3 py-1 text-xs bg-slate-800/50 rounded">
+                                            <i class="fas fa-lock mr-1"></i>Protected
+                                        </span>
                                     }
                                 </div>
                             </td>

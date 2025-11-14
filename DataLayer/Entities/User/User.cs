@@ -81,6 +81,8 @@ namespace DataLayer.Entities.User
 
         public virtual IEnumerable<Post.Post> Posts { get; set; }
         public virtual IEnumerable<Visitor> Visitors { get; set; }
+        public virtual ICollection<Permission.UserRole> UserRoles { get; set; }
+        
         #endregion
 
     }

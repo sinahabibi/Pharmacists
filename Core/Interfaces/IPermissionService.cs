@@ -8,5 +8,6 @@
         Task<bool> AssignRoleToUserAsync(int userId, int roleId, int? assignedBy = null);
         Task<bool> RemoveRoleFromUserAsync(int userId, int roleId);
         Task<bool> UserHasRoleAsync(int userId, string roleName);
+        Task<bool> UserHasAnyRoleAsync(int userId);
     }
 }

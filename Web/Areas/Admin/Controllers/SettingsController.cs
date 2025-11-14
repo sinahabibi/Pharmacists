@@ -7,7 +7,7 @@ namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize]
-    public class SettingsController : Controller
+    public class SettingsController : AdminBaseController
     {
         private readonly WebContext _context;
 

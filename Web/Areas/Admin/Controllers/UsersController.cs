@@ -8,9 +8,7 @@ using Web.Attributes;
 
 namespace Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize]
-    public class UsersController : Controller
+    public class UsersController : AdminBaseController
     {
         private readonly WebContext _context;
         private readonly IPasswordHasher _passwordHasher;
@@ -31,7 +29,11 @@ namespace Web.Areas.Admin.Controllers
         [Permission("Users.View")]
         public async Task<IActionResult> Details(int id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+                
             if (user == null)
             {
                 TempData["ErrorMessage"] = "User not found";
@@ -115,12 +117,32 @@ namespace Web.Areas.Admin.Controllers
         [Permission("Users.Edit")]
         public async Task<IActionResult> Edit(int id)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == id);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.UserId == id);
+                
             if (user == null)
             {
                 TempData["ErrorMessage"] = "User not found";
                 return RedirectToAction(nameof(Index));
             }
+
+            // Prevent editing Admin user
+            if (user.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["ErrorMessage"] = "Access Denied: Admin user cannot be modified";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Get all active roles
+            var allRoles = await _context.Roles
+                .Where(r => r.IsActive)
+                .OrderBy(r => r.DisplayName)
+                .ToListAsync();
+
+            // Get current user's role IDs
+            var userRoleIds = user.UserRoles.Select(ur => ur.RoleId).ToList();
 
             var viewModel = new EditUserViewModel
             {
@@ -132,7 +154,16 @@ namespace Web.Areas.Admin.Controllers
                 PhoneNumber = user.PhoneNumber,
                 IsEmailActive = user.IsEmailActive,
                 IsPhoneNumberActive = user.IsPhoneNumberActive,
-                IsBan = user.IsBan
+                IsBan = user.IsBan,
+                SelectedRoleIds = userRoleIds,
+                AvailableRoles = allRoles.Select(r => new RoleSelectionViewModel
+                {
+                    RoleId = r.RoleId,
+                    RoleName = r.RoleName,
+                    DisplayName = r.DisplayName,
+                    Description = r.Description,
+                    IsSelected = userRoleIds.Contains(r.RoleId)
+                }).ToList()
             };
 
             return View(viewModel);
@@ -143,16 +174,27 @@ namespace Web.Areas.Admin.Controllers
         [Permission("Users.Edit")]
         public async Task<IActionResult> Edit(EditUserViewModel viewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(viewModel);
-            }
-
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == viewModel.UserId);
+            var user = await _context.Users
+                .Include(u => u.UserRoles)
+                .FirstOrDefaultAsync(u => u.UserId == viewModel.UserId);
+                
             if (user == null)
             {
                 TempData["ErrorMessage"] = "User not found";
                 return RedirectToAction(nameof(Index));
+            }
+
+            // Prevent modification of Admin user
+            if (user.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                TempData["ErrorMessage"] = "Access Denied: Admin user cannot be modified";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                await LoadAvailableRoles(viewModel);
+                return View(viewModel);
             }
 
             // Check if username already exists for another user
@@ -161,6 +203,16 @@ namespace Web.Areas.Admin.Controllers
             if (existingUser != null)
             {
                 ModelState.AddModelError("UserName", "This username is already taken");
+                await LoadAvailableRoles(viewModel);
+                return View(viewModel);
+            }
+
+            // Prevent changing username to "Admin"
+            if (viewModel.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase) && 
+                !user.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                ModelState.AddModelError("UserName", "Cannot use 'Admin' as username - it is reserved");
+                await LoadAvailableRoles(viewModel);
                 return View(viewModel);
             }
 
@@ -181,6 +233,9 @@ namespace Web.Areas.Admin.Controllers
                 user.Password = _passwordHasher.HashPassword(viewModel.NewPassword);
             }
 
+            // Update user roles
+            await UpdateUserRoles(user.UserId, viewModel.SelectedRoleIds ?? new List<int>());
+
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "User information updated successfully";
@@ -195,6 +250,12 @@ namespace Web.Areas.Admin.Controllers
             if (user == null)
             {
                 return Json(new { success = false, message = "User not found" });
+            }
+
+            // Prevent deletion of Admin user
+            if (user.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return Json(new { success = false, message = "Access Denied: Admin user cannot be deleted" });
             }
 
             user.IsDelete = true;
@@ -218,10 +279,76 @@ namespace Web.Areas.Admin.Controllers
                 return Json(new { success = false, message = "User not found" });
             }
 
+            // Prevent banning Admin user
+            if (user.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return Json(new { success = false, message = "Access Denied: Admin user cannot be banned" });
+            }
+
             user.IsBan = !user.IsBan;
             await _context.SaveChangesAsync();
 
             return Json(new { success = true, isBan = user.IsBan, message = user.IsBan ? "User banned" : "User activated" });
+        }
+
+        private async Task LoadAvailableRoles(EditUserViewModel viewModel)
+        {
+            var allRoles = await _context.Roles
+                .Where(r => r.IsActive)
+                .OrderBy(r => r.DisplayName)
+                .ToListAsync();
+
+            viewModel.AvailableRoles = allRoles.Select(r => new RoleSelectionViewModel
+            {
+                RoleId = r.RoleId,
+                RoleName = r.RoleName,
+                DisplayName = r.DisplayName,
+                Description = r.Description,
+                IsSelected = viewModel.SelectedRoleIds?.Contains(r.RoleId) ?? false
+            }).ToList();
+        }
+
+        private async Task UpdateUserRoles(int userId, List<int> selectedRoleIds)
+        {
+            // Check if this is the Admin user
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserId == userId);
+            if (user != null && user.UserName.Equals("Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                // Don't update Admin user's roles
+                return;
+            }
+
+            // Get SuperAdmin role ID to prevent assignment/removal
+            var superAdminRole = await _context.Roles
+                .FirstOrDefaultAsync(r => r.RoleName == "SuperAdmin");
+
+            // Get current user roles
+            var currentUserRoles = await _context.UserRoles
+                .Where(ur => ur.UserId == userId)
+                .ToListAsync();
+
+            // Remove roles that are no longer selected (except SuperAdmin)
+            var rolesToRemove = currentUserRoles
+                .Where(ur => !selectedRoleIds.Contains(ur.RoleId) && 
+                            (superAdminRole == null || ur.RoleId != superAdminRole.RoleId))
+                .ToList();
+            _context.UserRoles.RemoveRange(rolesToRemove);
+
+            // Add new roles (exclude SuperAdmin from manual assignment)
+            var currentRoleIds = currentUserRoles.Select(ur => ur.RoleId).ToList();
+            var rolesToAdd = selectedRoleIds
+                .Where(roleId => !currentRoleIds.Contains(roleId) && 
+                                (superAdminRole == null || roleId != superAdminRole.RoleId))
+                .Select(roleId => new DataLayer.Entities.Permission.UserRole
+                {
+                    UserId = userId,
+                    RoleId = roleId,
+                    AssignedDate = DateTime.Now,
+                    AssignedBy = null
+                })
+                .ToList();
+            
+            await _context.UserRoles.AddRangeAsync(rolesToAdd);
         }
     }
 

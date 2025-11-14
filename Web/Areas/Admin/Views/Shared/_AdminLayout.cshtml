@@ -1,4 +1,19 @@
-﻿<!DOCTYPE html>
+﻿@using Core.Interfaces
+@using System.Security.Claims
+@inject IPermissionService _permissionService
+
+@{
+    // Get current user ID
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+    var currentUserId = userIdClaim != null ? int.Parse(userIdClaim.Value) : 0;
+    
+    // Check user permissions for menu items
+    var canViewUsers = await _permissionService.UserHasPermissionAsync(currentUserId, "Users.View");
+    var canViewRoles = await _permissionService.UserHasPermissionAsync(currentUserId, "Roles.View");
+    var canViewDashboard = await _permissionService.UserHasPermissionAsync(currentUserId, "Dashboard.View");
+}
+
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8" />
@@ -178,34 +193,45 @@
                         </a>
                     </div>
 
-                    <div class="mb-4">
-                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">Management</p>
-                        
-                        <a asp-area="Admin" asp-controller="Users" asp-action="Index"
-                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "sidebar-active text-white" : "")">
-                            <i class="fas fa-users w-5 text-lg"></i>
-                            <span class="font-medium">Users</span>
-                            <span class="ml-auto bg-purple-500/30 text-purple-300 text-xs px-2 py-1 rounded-full">New</span>
-                        </a>
+                    @if (canViewUsers || canViewRoles || canViewDashboard)
+                    {
+                        <div class="mb-4">
+                            <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">Management</p>
+                            
+                            @if (canViewUsers)
+                            {
+                                <a asp-area="Admin" asp-controller="Users" asp-action="Index"
+                                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "sidebar-active text-white" : "")">
+                                    <i class="fas fa-users w-5 text-lg"></i>
+                                    <span class="font-medium">Users</span>
+                                </a>
+                            }
 
-                        <a asp-area="Admin" asp-controller="Roles" asp-action="Index"
-                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Roles" ? "sidebar-active text-white" : "")">
-                            <i class="fas fa-user-shield w-5 text-lg"></i>
-                            <span class="font-medium">Roles & Permissions</span>
-                        </a>
+                            @if (canViewRoles)
+                            {
+                                <a asp-area="Admin" asp-controller="Roles" asp-action="Index"
+                                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Roles" ? "sidebar-active text-white" : "")">
+                                    <i class="fas fa-user-shield w-5 text-lg"></i>
+                                    <span class="font-medium">Roles & Permissions</span>
+                                </a>
+                            }
 
-                        <a asp-area="Admin" asp-controller="Posts" asp-action="Index"
-                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Posts" ? "sidebar-active text-white" : "")">
-                            <i class="fas fa-newspaper w-5 text-lg"></i>
-                            <span class="font-medium">Posts</span>
-                        </a>
+                            @if (canViewDashboard)
+                            {
+                                <a asp-area="Admin" asp-controller="Posts" asp-action="Index"
+                                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Posts" ? "sidebar-active text-white" : "")">
+                                    <i class="fas fa-newspaper w-5 text-lg"></i>
+                                    <span class="font-medium">Posts</span>
+                                </a>
 
-                        <a asp-area="Admin" asp-controller="Activities" asp-action="Index"
-                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activities" ? "sidebar-active text-white" : "")">
-                            <i class="fas fa-chart-line w-5 text-lg"></i>
-                            <span class="font-medium">Activities</span>
-                        </a>
-                    </div>
+                                <a asp-area="Admin" asp-controller="Activities" asp-action="Index"
+                                   class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activities" ? "sidebar-active text-white" : "")">
+                                    <i class="fas fa-chart-line w-5 text-lg"></i>
+                                    <span class="font-medium">Activities</span>
+                                </a>
+                            }
+                        </div>
+                    }
 
                     <div class="mb-4">
                         <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">Settings</p>
@@ -284,16 +310,6 @@
                 sidebarBackdrop.classList.add('hidden');
             });
         }
-
-        // Auto-hide alerts after 5 seconds
-        // setTimeout(() => {
-        //     const alerts = document.querySelectorAll('.fade-in');
-        //     alerts.forEach(alert => {
-        //         alert.style.transition = 'opacity 0.5s ease';
-        //         alert.style.opacity = '0';
-        //         setTimeout(() => alert.remove(), 500);
-        //     });
-        // }, 5000);
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

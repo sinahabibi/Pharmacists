@@ -7,9 +7,7 @@ using System.Security.Claims;
 
 namespace Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    [Authorize]
-    public class RolesController : Controller
+    public class RolesController : AdminBaseController
     {
         private readonly WebContext _context;
 
@@ -117,6 +115,13 @@ namespace Web.Areas.Admin.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            // Prevent editing SuperAdmin role
+            if (role.RoleName == "SuperAdmin")
+            {
+                TempData["ErrorMessage"] = "Access Denied: SuperAdmin role cannot be modified";
+                return RedirectToAction(nameof(Index));
+            }
+
             ViewBag.Permissions = _context.Permissions.ToList();
             ViewBag.RolePermissions = role.RolePermissions.Select(rp => rp.PermissionId).ToList();
 
@@ -128,13 +133,6 @@ namespace Web.Areas.Admin.Controllers
         [Permission("Roles.Edit")]
         public async Task<IActionResult> Edit(DataLayer.Entities.Permission.Role role, List<int> SelectedPermissions)
         {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Permissions = _context.Permissions.ToList();
-                ViewBag.RolePermissions = SelectedPermissions ?? new List<int>();
-                return View(role);
-            }
-
             var existingRole = await _context.Roles
                 .Include(r => r.RolePermissions)
                 .FirstOrDefaultAsync(r => r.RoleId == role.RoleId);
@@ -143,6 +141,20 @@ namespace Web.Areas.Admin.Controllers
             {
                 TempData["ErrorMessage"] = "Role not found";
                 return RedirectToAction(nameof(Index));
+            }
+
+            // Prevent modification of SuperAdmin role
+            if (existingRole.RoleName == "SuperAdmin")
+            {
+                TempData["ErrorMessage"] = "Access Denied: SuperAdmin role cannot be modified";
+                return RedirectToAction(nameof(Index));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Permissions = _context.Permissions.ToList();
+                ViewBag.RolePermissions = SelectedPermissions ?? new List<int>();
+                return View(role);
             }
 
             // Check if another role with same name exists
@@ -157,15 +169,6 @@ namespace Web.Areas.Admin.Controllers
                 return View(role);
             }
 
-            // Prevent modification of SuperAdmin role name
-            if (existingRole.RoleName == "SuperAdmin" && role.RoleName != "SuperAdmin")
-            {
-                ModelState.AddModelError("RoleName", "Cannot change SuperAdmin role name");
-                ViewBag.Permissions = _context.Permissions.ToList();
-                ViewBag.RolePermissions = SelectedPermissions ?? new List<int>();
-                return View(role);
-            }
-
             // Update role properties
             existingRole.RoleName = role.RoleName;
             existingRole.DisplayName = role.DisplayName;
@@ -173,7 +176,6 @@ namespace Web.Areas.Admin.Controllers
             existingRole.IsActive = role.IsActive;
 
             // Update permissions
-            // Remove existing permissions
             _context.RolePermissions.RemoveRange(existingRole.RolePermissions);
 
             // Add new permissions

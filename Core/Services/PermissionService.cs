@@ -96,5 +96,11 @@ namespace Core.Services
                 .Include(ur => ur.Role)
                 .AnyAsync(ur => ur.Role.RoleName == roleName);
         }
+
+        public async Task<bool> UserHasAnyRoleAsync(int userId)
+        {
+            return await _context.UserRoles
+                .AnyAsync(ur => ur.UserId == userId && ur.Role.IsActive);
+        }
     }
 }

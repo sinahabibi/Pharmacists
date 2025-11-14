@@ -44,5 +44,20 @@ namespace Web.Areas.Admin.ViewModels
         [Display(Name = "Confirm Password")]
         [Compare("NewPassword", ErrorMessage = "Password and confirmation do not match")]
         public string? ConfirmPassword { get; set; }
+
+        // Role Management Properties
+        [Display(Name = "User Roles")]
+        public List<int> SelectedRoleIds { get; set; } = new List<int>();
+
+        public List<RoleSelectionViewModel> AvailableRoles { get; set; } = new List<RoleSelectionViewModel>();
+    }
+
+    public class RoleSelectionViewModel
+    {
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+        public string DisplayName { get; set; }
+        public string? Description { get; set; }
+        public bool IsSelected { get; set; }
     }
 }

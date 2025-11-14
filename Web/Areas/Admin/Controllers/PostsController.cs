@@ -8,7 +8,7 @@ namespace Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Authorize]
-    public class PostsController : Controller
+    public class PostsController : AdminBaseController
     {
         private readonly WebContext _context;
 
