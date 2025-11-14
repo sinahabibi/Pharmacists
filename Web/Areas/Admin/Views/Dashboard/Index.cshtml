@@ -3,7 +3,7 @@
 @inject WebContext _context
 
 @{
-    ViewData["Title"] = "داشبورد مدیریت";
+    ViewData["Title"] = "Admin Dashboard";
     
     var totalUsers = _context.Users.Count();
     var totalPosts = _context.Posts?.Count() ?? 0;
@@ -19,9 +19,9 @@
     <!-- Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-            داشبورد مدیریت
+            Admin Dashboard
         </h1>
-        <p class="text-slate-400">خوش آمدید به پنل مدیریت سایت</p>
+        <p class="text-slate-400">Welcome to the site administration panel</p>
     </div>
 
     <!-- Stats Grid -->
@@ -32,10 +32,10 @@
                 <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                     <i class="fas fa-users text-white text-xl"></i>
                 </div>
-                <span class="text-xs text-slate-400">کل کاربران</span>
+                <span class="text-xs text-slate-400">Total Users</span>
             </div>
             <h3 class="text-3xl font-bold text-white mb-1">@totalUsers.ToString("N0")</h3>
-            <p class="text-sm text-slate-400">کاربر ثبت‌شده</p>
+            <p class="text-sm text-slate-400">Registered Users</p>
         </div>
 
         <!-- Total Posts -->
@@ -44,10 +44,10 @@
                 <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center">
                     <i class="fas fa-newspaper text-white text-xl"></i>
                 </div>
-                <span class="text-xs text-slate-400">کل پست‌ها</span>
+                <span class="text-xs text-slate-400">Total Posts</span>
             </div>
             <h3 class="text-3xl font-bold text-white mb-1">@totalPosts.ToString("N0")</h3>
-            <p class="text-sm text-slate-400">پست منتشر شده</p>
+            <p class="text-sm text-slate-400">Published Posts</p>
         </div>
 
         <!-- Total Visitors -->
@@ -56,10 +56,10 @@
                 <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center">
                     <i class="fas fa-eye text-white text-xl"></i>
                 </div>
-                <span class="text-xs text-slate-400">بازدیدکنندگان</span>
+                <span class="text-xs text-slate-400">Visitors</span>
             </div>
             <h3 class="text-3xl font-bold text-white mb-1">@totalVisitors.ToString("N0")</h3>
-            <p class="text-sm text-slate-400">بازدید کل</p>
+            <p class="text-sm text-slate-400">Total Visits</p>
         </div>
 
         <!-- Recent Activities -->
@@ -68,10 +68,10 @@
                 <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
                     <i class="fas fa-chart-line text-white text-xl"></i>
                 </div>
-                <span class="text-xs text-slate-400">فعالیت‌ها</span>
+                <span class="text-xs text-slate-400">Activities</span>
             </div>
             <h3 class="text-3xl font-bold text-white mb-1">@recentActivitiesCount.ToString("N0")</h3>
-            <p class="text-sm text-slate-400">فعالیت ثبت شده</p>
+            <p class="text-sm text-slate-400">Logged Activities</p>
         </div>
     </div>
 
@@ -81,11 +81,11 @@
         <div class="glass-card rounded-xl p-6">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-users ml-3 text-blue-400"></i>
-                    آخرین کاربران
+                    <i class="fas fa-users mr-3 text-blue-400"></i>
+                    Recent Users
                 </h2>
                 <a asp-area="Admin" asp-controller="Users" asp-action="Index" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                    مشاهده همه <i class="fas fa-arrow-left mr-1"></i>
+                    View All <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
             <div class="space-y-3">
@@ -94,7 +94,7 @@
                     @foreach (var user in recentUsers)
                     {
                         <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 hover:bg-slate-800/50 transition-colors">
-                            <div class="flex items-center space-x-3 space-x-reverse">
+                            <div class="flex items-center space-x-3">
                                 <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                                     @user.UserName.Substring(0, 1).ToUpper()
                                 </div>
@@ -109,7 +109,7 @@
                 }
                 else
                 {
-                    <p class="text-center text-slate-400 py-8">کاربری یافت نشد</p>
+                    <p class="text-center text-slate-400 py-8">No users found</p>
                 }
             </div>
         </div>
@@ -118,11 +118,11 @@
         <div class="glass-card rounded-xl p-6">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-newspaper ml-3 text-purple-400"></i>
-                    آخرین پست‌ها
+                    <i class="fas fa-newspaper mr-3 text-purple-400"></i>
+                    Recent Posts
                 </h2>
                 <a asp-area="Admin" asp-controller="Posts" asp-action="Index" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                    مشاهده همه <i class="fas fa-arrow-left mr-1"></i>
+                    View All <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
             <div class="space-y-3">
@@ -135,15 +135,15 @@
                                 <h3 class="font-medium text-white">@post.Title</h3>
                                 @if (post.IsPublish)
                                 {
-                                    <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">منتشر شده</span>
+                                    <span class="text-xs bg-green-500/20 text-green-400 px-2 py-1 rounded-full">Published</span>
                                 }
                                 else
                                 {
-                                    <span class="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full">پیش‌نویس</span>
+                                    <span class="text-xs bg-yellow-500/20 text-yellow-400 px-2 py-1 rounded-full">Draft</span>
                                 }
                             </div>
                             <div class="flex items-center justify-between text-sm text-slate-400">
-                                <span><i class="fas fa-user ml-1"></i>@post.User.UserName</span>
+                                <span><i class="fas fa-user mr-1"></i>@post.User.UserName</span>
                                 <span>@post.CreateDate.ToString("yyyy/MM/dd")</span>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                 }
                 else
                 {
-                    <p class="text-center text-slate-400 py-8">پستی یافت نشد</p>
+                    <p class="text-center text-slate-400 py-8">No posts found</p>
                 }
             </div>
         </div>
@@ -161,11 +161,11 @@
     <div class="glass-card rounded-xl p-6">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-bold text-white flex items-center">
-                <i class="fas fa-chart-line ml-3 text-pink-400"></i>
-                آخرین فعالیت‌ها
+                <i class="fas fa-chart-line mr-3 text-pink-400"></i>
+                Recent Activities
             </h2>
             <a asp-area="Admin" asp-controller="Activities" asp-action="Index" class="text-sm text-purple-400 hover:text-purple-300 transition-colors">
-                مشاهده همه <i class="fas fa-arrow-left mr-1"></i>
+                View All <i class="fas fa-arrow-right ml-1"></i>
             </a>
         </div>
         <div class="space-y-3">
@@ -173,7 +173,7 @@
             {
                 @foreach (var activity in recentActivities)
                 {
-                    <div class="flex items-start space-x-3 space-x-reverse p-3 rounded-lg bg-slate-800/30 hover:bg-slate-800/50 transition-colors">
+                    <div class="flex items-start space-x-3 p-3 rounded-lg bg-slate-800/30 hover:bg-slate-800/50 transition-colors">
                         <div class="flex-shrink-0 w-2 h-2 mt-2 rounded-full @(activity.PriorityId == 1 ? "bg-red-500" : activity.PriorityId == 2 ? "bg-yellow-500" : "bg-green-500")"></div>
                         <div class="flex-1">
                             <p class="text-white">@activity.Message</p>
@@ -189,7 +189,7 @@
             }
             else
             {
-                <p class="text-center text-slate-400 py-8">فعالیتی یافت نشد</p>
+                <p class="text-center text-slate-400 py-8">No activities found</p>
             }
         </div>
     </div>

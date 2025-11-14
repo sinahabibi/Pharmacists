@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using DataLayer.Context;
 using Microsoft.EntityFrameworkCore;
+using Web.Attributes;
 
 namespace Web.Areas.Admin.Controllers
 {
@@ -16,6 +17,7 @@ namespace Web.Areas.Admin.Controllers
             _context = context;
         }
 
+        [Permission("Dashboard.View")]
         public async Task<IActionResult> Index()
         {
             var activities = await _context.RecentActivities
@@ -27,28 +29,30 @@ namespace Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Permission("Dashboard.View")]
         public async Task<IActionResult> Delete(int id)
         {
             var activity = await _context.RecentActivities.FirstOrDefaultAsync(a => a.Id == id);
             if (activity == null)
             {
-                return Json(new { success = false, message = "فعالیت یافت نشد" });
+                return Json(new { success = false, message = "Activity not found" });
             }
 
             _context.RecentActivities.Remove(activity);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true, message = "فعالیت با موفقیت حذف شد" });
+            return Json(new { success = true, message = "Activity deleted successfully" });
         }
 
         [HttpPost]
+        [Permission("Dashboard.View")]
         public async Task<IActionResult> ClearAll()
         {
             var activities = await _context.RecentActivities.ToListAsync();
             _context.RecentActivities.RemoveRange(activities);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true, message = "تمام فعالیت‌ها پاک شدند" });
+            return Json(new { success = true, message = "All activities cleared" });
         }
     }
 }

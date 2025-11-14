@@ -27,7 +27,7 @@ namespace Web.Areas.Admin.Controllers
             var setting = await _context.Settings.FirstOrDefaultAsync(s => s.Id == id);
             if (setting == null)
             {
-                TempData["ErrorMessage"] = "تنظیمات یافت نشد";
+                TempData["ErrorMessage"] = "Setting not found";
                 return RedirectToAction(nameof(Index));
             }
             return View(setting);

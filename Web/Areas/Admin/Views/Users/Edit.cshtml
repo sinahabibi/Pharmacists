@@ -1,0 +1,185 @@
+﻿@model Web.Areas.Admin.ViewModels.EditUserViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+}
+
+<div class="fade-in">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+                Edit User
+            </h1>
+            <p class="text-slate-400">Edit user information</p>
+        </div>
+        <a asp-action="Index" class="px-6 py-3 bg-slate-700/50 text-slate-300 rounded-lg hover:bg-slate-700 transition-all">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to List
+        </a>
+    </div>
+
+    <!-- Edit Form -->
+    <div class="glass-card rounded-xl p-6">
+        <form asp-action="Edit" method="post" class="space-y-6">
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.UserId)
+
+            <div asp-validation-summary="ModelOnly" class="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400 mb-6"></div>
+
+            <!-- Basic Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Username -->
+                <div class="form-group">
+                    <label asp-for="UserName" class="block text-sm font-medium text-slate-300 mb-2">
+                        <i class="fas fa-user mr-2"></i>
+                        @Html.DisplayNameFor(m => m.UserName)
+                    </label>
+                    <input asp-for="UserName" 
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                           placeholder="Enter username" />
+                    <span asp-validation-for="UserName" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label asp-for="Email" class="block text-sm font-medium text-slate-300 mb-2">
+                        <i class="fas fa-envelope mr-2"></i>
+                        @Html.DisplayNameFor(m => m.Email)
+                    </label>
+                    <input asp-for="Email" type="email"
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                           placeholder="Enter email" />
+                    <span asp-validation-for="Email" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <!-- First Name -->
+                <div class="form-group">
+                    <label asp-for="FirstName" class="block text-sm font-medium text-slate-300 mb-2">
+                        <i class="fas fa-id-card mr-2"></i>
+                        @Html.DisplayNameFor(m => m.FirstName)
+                    </label>
+                    <input asp-for="FirstName" 
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                           placeholder="Enter first name" />
+                    <span asp-validation-for="FirstName" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <!-- Last Name -->
+                <div class="form-group">
+                    <label asp-for="LastName" class="block text-sm font-medium text-slate-300 mb-2">
+                        <i class="fas fa-id-card mr-2"></i>
+                        @Html.DisplayNameFor(m => m.LastName)
+                    </label>
+                    <input asp-for="LastName" 
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                           placeholder="Enter last name" />
+                    <span asp-validation-for="LastName" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+
+                <!-- Phone Number -->
+                <div class="form-group">
+                    <label asp-for="PhoneNumber" class="block text-sm font-medium text-slate-300 mb-2">
+                        <i class="fas fa-phone mr-2"></i>
+                        @Html.DisplayNameFor(m => m.PhoneNumber)
+                    </label>
+                    <input asp-for="PhoneNumber" 
+                           class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                           placeholder="Enter phone number" />
+                    <span asp-validation-for="PhoneNumber" class="text-red-400 text-sm mt-1 block"></span>
+                </div>
+            </div>
+
+            <!-- Password Section -->
+            <div class="border-t border-slate-700 pt-6 mt-6">
+                <h3 class="text-lg font-semibold text-white mb-4">
+                    <i class="fas fa-key mr-2"></i>
+                    Change Password (Optional)
+                </h3>
+                <p class="text-sm text-slate-400 mb-4">If you want to change the password, fill in the fields below. Otherwise, leave them empty.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- New Password -->
+                    <div class="form-group">
+                        <label asp-for="NewPassword" class="block text-sm font-medium text-slate-300 mb-2">
+                            <i class="fas fa-lock mr-2"></i>
+                            @Html.DisplayNameFor(m => m.NewPassword)
+                        </label>
+                        <input asp-for="NewPassword" type="password"
+                               class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                               placeholder="New password" />
+                        <span asp-validation-for="NewPassword" class="text-red-400 text-sm mt-1 block"></span>
+                    </div>
+
+                    <!-- Confirm Password -->
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="block text-sm font-medium text-slate-300 mb-2">
+                            <i class="fas fa-lock mr-2"></i>
+                            @Html.DisplayNameFor(m => m.ConfirmPassword)
+                        </label>
+                        <input asp-for="ConfirmPassword" type="password"
+                               class="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:border-purple-500 transition-colors" 
+                               placeholder="Confirm new password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-red-400 text-sm mt-1 block"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Checkboxes -->
+            <div class="border-t border-slate-700 pt-6 mt-6">
+                <h3 class="text-lg font-semibold text-white mb-4">
+                    <i class="fas fa-cog mr-2"></i>
+                    Status Settings
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Email Active -->
+                    <div class="flex items-center space-x-3 bg-slate-800/30 p-4 rounded-lg">
+                        <input asp-for="IsEmailActive" type="checkbox" 
+                               class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-purple-500 focus:ring-purple-500 focus:ring-2" />
+                        <label asp-for="IsEmailActive" class="text-slate-300 cursor-pointer flex items-center">
+                            <i class="fas fa-envelope-circle-check mr-2"></i>
+                            @Html.DisplayNameFor(m => m.IsEmailActive)
+                        </label>
+                    </div>
+
+                    <!-- Phone Active -->
+                    <div class="flex items-center space-x-3 bg-slate-800/30 p-4 rounded-lg">
+                        <input asp-for="IsPhoneNumberActive" type="checkbox" 
+                               class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-purple-500 focus:ring-purple-500 focus:ring-2" />
+                        <label asp-for="IsPhoneNumberActive" class="text-slate-300 cursor-pointer flex items-center">
+                            <i class="fas fa-phone-circle-check mr-2"></i>
+                            @Html.DisplayNameFor(m => m.IsPhoneNumberActive)
+                        </label>
+                    </div>
+
+                    <!-- Is Ban -->
+                    <div class="flex items-center space-x-3 bg-slate-800/30 p-4 rounded-lg">
+                        <input asp-for="IsBan" type="checkbox" 
+                               class="w-5 h-5 rounded border-slate-600 bg-slate-700 text-red-500 focus:ring-red-500 focus:ring-2" />
+                        <label asp-for="IsBan" class="text-slate-300 cursor-pointer flex items-center">
+                            <i class="fas fa-ban mr-2"></i>
+                            @Html.DisplayNameFor(m => m.IsBan)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center justify-end space-x-4 pt-6 border-t border-slate-700">
+                <a asp-action="Index" class="px-6 py-3 bg-slate-700/50 text-slate-300 rounded-lg hover:bg-slate-700 transition-all">
+                    <i class="fas fa-times mr-2"></i>
+                    Cancel
+                </a>
+                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-medium hover:from-purple-600 hover:to-pink-600 transition-all">
+                    <i class="fas fa-save mr-2"></i>
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

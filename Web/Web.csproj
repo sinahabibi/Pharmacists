@@ -20,8 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Views\Roles\" />
-    <Folder Include="Attributes\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 

@@ -1,18 +1,18 @@
 ﻿<!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - پنل مدیریت</title>
+    <title>@ViewData["Title"] - Admin Panel</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
     <style>
         * {
-            font-family: 'Vazirmatn', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -46,7 +46,7 @@
 
         .sidebar-active {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.3) 0%, rgba(168, 85, 247, 0.2) 100%);
-            border-right: 3px solid #8b5cf6;
+            border-left: 3px solid #8b5cf6;
             box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
         }
 
@@ -109,14 +109,14 @@
 </head>
 <body class="antialiased bg-gradient-to-br from-slate-900 via-purple-900/10 to-slate-900">
     <!-- Mobile Header -->
-    <header class="lg:hidden fixed top-0 right-0 left-0 z-40 liquid-glass border-b border-slate-700/50">
+    <header class="lg:hidden fixed top-0 left-0 right-0 z-40 liquid-glass border-b border-slate-700/50">
         <div class="flex items-center justify-between p-4">
             <button id="mobile-menu-btn" class="text-slate-300 hover:text-purple-400 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
             </button>
-            <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">پنل مدیریت</h1>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Admin Panel</h1>
             <a href="/" class="text-slate-300 hover:text-purple-400 transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -127,21 +127,21 @@
 
     <div class="flex min-h-screen pt-16 lg:pt-0">
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed lg:static inset-y-0 right-0 z-50 w-72 transform translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out liquid-glass border-l border-slate-700/50">
+        <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-72 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out liquid-glass border-r border-slate-700/50">
             <div class="flex flex-col h-full">
                 <!-- Logo -->
                 <div class="hidden lg:flex items-center justify-between p-6 border-b border-slate-700/50">
                     <div>
                         <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                            <i class="fas fa-crown ml-2"></i>پنل مدیریت
+                            <i class="fas fa-crown mr-2"></i>Admin Panel
                         </h1>
-                        <p class="text-xs text-slate-400 mt-1">داشبورد کامل</p>
+                        <p class="text-xs text-slate-400 mt-1">Full Dashboard</p>
                     </div>
                 </div>
 
                 <!-- Admin Info -->
                 <div class="p-6 border-b border-slate-700/50">
-                    <div class="flex items-center space-x-3 space-x-reverse">
+                    <div class="flex items-center space-x-3">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg">
                             @{
                                 var userName = User.Identity?.Name ?? "A";
@@ -162,7 +162,7 @@
                                 }
                                 @displayName
                             </p>
-                            <p class="text-sm text-purple-400">مدیر سیستم</p>
+                            <p class="text-sm text-purple-400">Administrator</p>
                         </div>
                     </div>
                 </div>
@@ -170,57 +170,63 @@
                 <!-- Navigation -->
                 <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
                     <div class="mb-4">
-                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">داشبورد</p>
+                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">Dashboard</p>
                         <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"
-                           class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "sidebar-active text-white" : "")">
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Dashboard" ? "sidebar-active text-white" : "")">
                             <i class="fas fa-home w-5 text-lg"></i>
-                            <span class="font-medium">خانه</span>
+                            <span class="font-medium">Home</span>
                         </a>
                     </div>
 
                     <div class="mb-4">
-                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">مدیریت</p>
+                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">Management</p>
                         
                         <a asp-area="Admin" asp-controller="Users" asp-action="Index"
-                           class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "sidebar-active text-white" : "")">
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Users" ? "sidebar-active text-white" : "")">
                             <i class="fas fa-users w-5 text-lg"></i>
-                            <span class="font-medium">کاربران</span>
-                            <span class="mr-auto bg-purple-500/30 text-purple-300 text-xs px-2 py-1 rounded-full">جدید</span>
+                            <span class="font-medium">Users</span>
+                            <span class="ml-auto bg-purple-500/30 text-purple-300 text-xs px-2 py-1 rounded-full">New</span>
+                        </a>
+
+                        <a asp-area="Admin" asp-controller="Roles" asp-action="Index"
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Roles" ? "sidebar-active text-white" : "")">
+                            <i class="fas fa-user-shield w-5 text-lg"></i>
+                            <span class="font-medium">Roles & Permissions</span>
                         </a>
 
                         <a asp-area="Admin" asp-controller="Posts" asp-action="Index"
-                           class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Posts" ? "sidebar-active text-white" : "")">
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Posts" ? "sidebar-active text-white" : "")">
                             <i class="fas fa-newspaper w-5 text-lg"></i>
-                            <span class="font-medium">پست‌ها</span>
+                            <span class="font-medium">Posts</span>
                         </a>
 
                         <a asp-area="Admin" asp-controller="Activities" asp-action="Index"
-                           class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activities" ? "sidebar-active text-white" : "")">
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Activities" ? "sidebar-active text-white" : "")">
                             <i class="fas fa-chart-line w-5 text-lg"></i>
-                            <span class="font-medium">فعالیت‌ها</span>
+                            <span class="font-medium">Activities</span>
                         </a>
                     </div>
 
                     <div class="mb-4">
-                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">تنظیمات</p>
+                        <p class="text-xs font-semibold text-slate-500 uppercase mb-2 px-4">Settings</p>
                         
                         <a asp-area="Admin" asp-controller="Settings" asp-action="Index"
-                           class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "sidebar-active text-white" : "")">
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all @(ViewContext.RouteData.Values["controller"]?.ToString() == "Settings" ? "sidebar-active text-white" : "")">
                             <i class="fas fa-cog w-5 text-lg"></i>
-                            <span class="font-medium">تنظیمات سایت</span>
+                            <span class="font-medium">Site Settings</span>
                         </a>
                     </div>
 
                     <div class="pt-4 border-t border-slate-700/50 mt-4">
-                        <a href="/" class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all">
+                        <a href="/" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-purple-500/20 hover:text-white transition-all">
                             <i class="fas fa-globe w-5 text-lg"></i>
-                            <span class="font-medium">بازگشت به سایت</span>
+                            <span class="font-medium">Back to Site</span>
                         </a>
 
                         <a asp-area="" asp-controller="Account" asp-action="Logout"
-                           class="flex items-center space-x-3 space-x-reverse px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">
+                           class="flex items-center space-x-3 px-4 py-3 rounded-lg text-red-400 hover:bg-red-500/20 hover:text-red-300 transition-all">
                             <i class="fas fa-sign-out-alt w-5 text-lg"></i>
-                            <span class="font-medium">خروج</span>
+                            <span class="font-medium">Logout</span>
                         </a>
                     </div>
                 </nav>
@@ -234,7 +240,7 @@
         <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
             @if (TempData["SuccessMessage"] != null)
             {
-                <div class="mb-6 p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-300 flex items-center space-x-3 space-x-reverse fade-in">
+                <div class="mb-6 p-4 rounded-lg bg-green-500/20 border border-green-500/50 text-green-300 flex items-center space-x-3 fade-in">
                     <i class="fas fa-check-circle text-xl"></i>
                     <span>@TempData["SuccessMessage"]</span>
                 </div>
@@ -242,7 +248,7 @@
 
             @if (TempData["ErrorMessage"] != null)
             {
-                <div class="mb-6 p-4 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300 flex items-center space-x-3 space-x-reverse fade-in">
+                <div class="mb-6 p-4 rounded-lg bg-red-500/20 border border-red-500/50 text-red-300 flex items-center space-x-3 fade-in">
                     <i class="fas fa-exclamation-circle text-xl"></i>
                     <span>@TempData["ErrorMessage"]</span>
                 </div>
@@ -250,7 +256,7 @@
 
             @if (TempData["InfoMessage"] != null)
             {
-                <div class="mb-6 p-4 rounded-lg bg-blue-500/20 border border-blue-500/50 text-blue-300 flex items-center space-x-3 space-x-reverse fade-in">
+                <div class="mb-6 p-4 rounded-lg bg-blue-500/20 border border-blue-500/50 text-blue-300 flex items-center space-x-3 fade-in">
                     <i class="fas fa-info-circle text-xl"></i>
                     <span>@TempData["InfoMessage"]</span>
                 </div>
@@ -269,25 +275,25 @@
 
         if (mobileMenuBtn) {
             mobileMenuBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('translate-x-full');
+                sidebar.classList.toggle('-translate-x-full');
                 sidebarBackdrop.classList.toggle('hidden');
             });
 
             sidebarBackdrop.addEventListener('click', () => {
-                sidebar.classList.add('translate-x-full');
+                sidebar.classList.add('-translate-x-full');
                 sidebarBackdrop.classList.add('hidden');
             });
         }
 
         // Auto-hide alerts after 5 seconds
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.fade-in');
-            alerts.forEach(alert => {
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            });
-        }, 5000);
+        // setTimeout(() => {
+        //     const alerts = document.querySelectorAll('.fade-in');
+        //     alerts.forEach(alert => {
+        //         alert.style.transition = 'opacity 0.5s ease';
+        //         alert.style.opacity = '0';
+        //         setTimeout(() => alert.remove(), 500);
+        //     });
+        // }, 5000);
     </script>
 
     @await RenderSectionAsync("Scripts", required: false)

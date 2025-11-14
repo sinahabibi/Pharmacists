@@ -11,5 +11,11 @@ namespace Web.Areas.Admin.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }

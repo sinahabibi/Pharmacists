@@ -1,7 +1,7 @@
 ﻿@model List<DataLayer.Entities.Post.Post>
 
 @{
-    ViewData["Title"] = "مدیریت پست‌ها";
+    ViewData["Title"] = "Post Management";
 }
 
 <div class="fade-in">
@@ -9,13 +9,13 @@
     <div class="flex items-center justify-between mb-8">
         <div>
             <h1 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                مدیریت پست‌ها
+                Post Management
             </h1>
-            <p class="text-slate-400">مشاهده و مدیریت تمام پست‌های سایت</p>
+            <p class="text-slate-400">View and manage all site posts</p>
         </div>
         <a asp-action="Create" class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-medium hover:from-purple-600 hover:to-pink-600 transition-all">
-            <i class="fas fa-plus ml-2"></i>
-            ایجاد پست جدید
+            <i class="fas fa-plus mr-2"></i>
+            Create New Post
         </a>
     </div>
 
@@ -24,7 +24,7 @@
         <div class="glass-card rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-sm mb-1">کل پست‌ها</p>
+                    <p class="text-slate-400 text-sm mb-1">Total Posts</p>
                     <p class="text-2xl font-bold text-white">@Model.Count</p>
                 </div>
                 <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
@@ -36,7 +36,7 @@
         <div class="glass-card rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-sm mb-1">منتشر شده</p>
+                    <p class="text-slate-400 text-sm mb-1">Published</p>
                     <p class="text-2xl font-bold text-white">@Model.Count(p => p.IsPublish)</p>
                 </div>
                 <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
@@ -48,7 +48,7 @@
         <div class="glass-card rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-sm mb-1">پیش‌نویس</p>
+                    <p class="text-slate-400 text-sm mb-1">Drafts</p>
                     <p class="text-2xl font-bold text-white">@Model.Count(p => !p.IsPublish)</p>
                 </div>
                 <div class="w-10 h-10 rounded-lg bg-yellow-500/20 flex items-center justify-center">
@@ -60,7 +60,7 @@
         <div class="glass-card rounded-lg p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-slate-400 text-sm mb-1">کل بازدید</p>
+                    <p class="text-slate-400 text-sm mb-1">Total Views</p>
                     <p class="text-2xl font-bold text-white">@Model.Sum(p => p.Visit).ToString("N0")</p>
                 </div>
                 <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -84,40 +84,40 @@
                         @if (post.IsPublish)
                         {
                             <span class="px-3 py-1 text-xs font-semibold rounded-full bg-green-500/20 text-green-400">
-                                <i class="fas fa-check-circle ml-1"></i>منتشر شده
+                                <i class="fas fa-check-circle mr-1"></i>Published
                             </span>
                         }
                         else
                         {
                             <span class="px-3 py-1 text-xs font-semibold rounded-full bg-yellow-500/20 text-yellow-400">
-                                <i class="fas fa-file-alt ml-1"></i>پیش‌نویس
+                                <i class="fas fa-file-alt mr-1"></i>Draft
                             </span>
                         }
                     </div>
 
-                    <div class="flex items-center space-x-4 space-x-reverse text-sm text-slate-400 mb-4 pb-4 border-b border-slate-700/50">
+                    <div class="flex items-center space-x-4 text-sm text-slate-400 mb-4 pb-4 border-b border-slate-700/50">
                         <div class="flex items-center">
-                            <i class="fas fa-user ml-2"></i>
+                            <i class="fas fa-user mr-2"></i>
                             <span>@post.User.UserName</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-calendar ml-2"></i>
+                            <i class="fas fa-calendar mr-2"></i>
                             <span>@post.CreateDate.ToString("yyyy/MM/dd")</span>
                         </div>
                         <div class="flex items-center">
-                            <i class="fas fa-eye ml-2"></i>
-                            <span>@post.Visit.ToString("N0") بازدید</span>
+                            <i class="fas fa-eye mr-2"></i>
+                            <span>@post.Visit.ToString("N0") views</span>
                         </div>
                     </div>
 
-                    <div class="flex items-center space-x-2 space-x-reverse">
+                    <div class="flex items-center space-x-2">
                         <a asp-action="Edit" asp-route-id="@post.PostId" 
                            class="flex-1 px-4 py-2 bg-blue-500/20 text-blue-400 rounded-lg hover:bg-blue-500/30 transition-colors text-center">
-                            <i class="fas fa-edit ml-2"></i>ویرایش
+                            <i class="fas fa-edit mr-2"></i>Edit
                         </a>
                         <button onclick="togglePublish(@post.PostId, @post.IsPublish.ToString().ToLower())" 
                                 class="flex-1 px-4 py-2 bg-yellow-500/20 text-yellow-400 rounded-lg hover:bg-yellow-500/30 transition-colors">
-                            <i class="fas fa-@(post.IsPublish ? "eye-slash" : "eye") ml-2"></i>@(post.IsPublish ? "عدم انتشار" : "انتشار")
+                            <i class="fas fa-@(post.IsPublish ? "eye-slash" : "eye") mr-2"></i>@(post.IsPublish ? "Unpublish" : "Publish")
                         </button>
                         <button onclick="deletePost(@post.PostId)" 
                                 class="px-4 py-2 bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30 transition-colors">
@@ -133,11 +133,11 @@
     {
         <div class="glass-card rounded-xl p-12 text-center">
             <i class="fas fa-newspaper text-6xl text-slate-600 mb-4"></i>
-            <h3 class="text-xl font-bold text-white mb-2">هیچ پستی یافت نشد</h3>
-            <p class="text-slate-400 mb-6">اولین پست خود را ایجاد کنید</p>
+            <h3 class="text-xl font-bold text-white mb-2">No posts found</h3>
+            <p class="text-slate-400 mb-6">Create your first post</p>
             <a asp-action="Create" class="inline-block px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-medium hover:from-purple-600 hover:to-pink-600 transition-all">
-                <i class="fas fa-plus ml-2"></i>
-                ایجاد پست جدید
+                <i class="fas fa-plus mr-2"></i>
+                Create New Post
             </a>
         </div>
     }
@@ -147,7 +147,7 @@
     <script>
         // Toggle publish status
         async function togglePublish(postId, isPublish) {
-            if (!confirm(isPublish ? 'آیا میخواهید این پست را از انتشار خارج کنید؟' : 'آیا میخواهید این پست را منتشر کنید؟')) {
+            if (!confirm(isPublish ? 'Do you want to unpublish this post?' : 'Do you want to publish this post?')) {
                 return;
             }
 
@@ -168,13 +168,13 @@
                     alert(result.message);
                 }
             } catch (error) {
-                alert('خطا در انجام عملیات');
+                alert('Error performing operation');
             }
         }
 
         // Delete post
         async function deletePost(postId) {
-            if (!confirm('آیا از حذف این پست اطمینان دارید؟ این عملیات قابل بازگشت نیست.')) {
+            if (!confirm('Are you sure you want to delete this post? This action cannot be undone.')) {
                 return;
             }
 
@@ -195,7 +195,7 @@
                     alert(result.message);
                 }
             } catch (error) {
-                alert('خطا در انجام عملیات');
+                alert('Error performing operation');
             }
         }
     </script>

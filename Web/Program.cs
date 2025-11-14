@@ -47,6 +47,7 @@ namespace Web
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IPermissionService, PermissionService>();
 
             // Add Session
             builder.Services.AddSession(options =>
